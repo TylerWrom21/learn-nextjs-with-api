@@ -1,54 +1,45 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
-import { Box, Home, Inbox, Moon, Search, Settings, ShoppingCart, Sun } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuSkeleton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppUserSidebar } from "@/components/app-sidebar";
+import { SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuSkeleton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppAdminSidebar } from "@/components/app-sidebar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Box, Home, Inbox, Moon, Search, Settings, ShoppingCart, Sidebar, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
 
-export function userItems(id: string) {
+export function adminItems(id: string) {
   return [
     {
       title: "Dashboard",
-      url: `/user/${id}`,
+      url: `/admin/${id}`,
       icon: Home,
     },
     {
-      title: "Inboxs",
-      url: `/user/${id}/inboxs`,
-      icon: Inbox,
-    },
-    {
-      title: "Products",
-      url: `/user/${id}/products`,
-      icon: Box,
-    },
-    {
-      title: "Carts",
-      url: `/user/${id}/carts`,
-      icon: ShoppingCart,
+      title: "Users",
+      url: `/admin/${id}/users`,
+      icon: User,
     },
     {
       title: "Search",
-      url: `/user/${id}/search`,
+      url: `/admin/${id}/search`,
       icon: Search,
     },
     {
       title: "Settings",
-      url: `/user/${id}/settings`,
+      url: `/admin/${id}/settings`,
       icon: Settings,
     },
   ];
 }
 
-export function UserSidebar({ children }: { children: React.ReactNode }) {
+export function AdminSidebar({ children }: { children: React.ReactNode }) {
   const { setTheme } = useTheme();
   return (
     <SidebarProvider>
-      <AppUserSidebar />
+      <AppAdminSidebar />
       <main className="w-full">
         <SidebarHeader className="w-full flex gap-5 flex-row items-center">
           <SidebarTrigger />
@@ -61,15 +52,9 @@ export function UserSidebar({ children }: { children: React.ReactNode }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")} className="cursor-pointer">
-                Dark
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")} className="cursor-pointer">
-                System
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">Light</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")} className="cursor-pointer">Dark</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")} className="cursor-pointer">System</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarHeader>
@@ -81,9 +66,11 @@ export function UserSidebar({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function User() {
+export default function Admin() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
+  const { admin } = useParams<{ admin: string }>();
+  console.log(admin, id);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -109,8 +96,8 @@ export default function User() {
     );
 
   return (
-    <UserSidebar>
-      <p>Welcome, user {id}</p>
-    </UserSidebar>
+    <AdminSidebar>
+      <p>Welcome, admin {id} {admin}</p>
+    </AdminSidebar>
   );
 }
